@@ -1,26 +1,43 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
-function App() {
+const App = () => {
+  const [restaurants, setRestaurants] = useState([]);
+  const [newFilter, setNewFilter] = useState("");
+
+  useEffect(() => {
+    console.log("effect");
+    axios.get("https://raw.githubusercontent.com/woltapp/summer2020/master/restaurants.json").then(response => {
+      console.log("promise fulfilled");
+      setRestaurants(response.data);
+    });
+  }, []);
+
+  const Restaurants = props => {
+    return (
+      <div>
+        {props.restaurants.map(restaurant => (
+          <li>
+          <Infobox restaurant={restaurant}/>;
+          </li>
+        ))}
+      </div>
+    );
+  };
+
+const Infobox = ({ restaurant }) => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <p>{restaurant.name}</p>
     </div>
   );
+};
+return (
+  <div>
+    <p>ravintolat</p>
+    <Restaurants restaurants={restaurants} />
+  </div>
+)
 }
 
 export default App;
